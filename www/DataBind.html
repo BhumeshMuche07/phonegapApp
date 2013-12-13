@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <link href="css/kendo.common.min.css" rel="stylesheet" />
+    <link href="css/kendo.default.min.css" rel="stylesheet" />
+    <link href="css/kendo.mobile.all.min.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/kendo.all.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/cordova.js"></script>
+    <script src="js/sample.js"></script>
+
+</head>
+<body>
+    <div data-role="view" id="friends" class="two-drawer-home" data-layout="drawer-layout">
+        <h2 class="friends_class">Team</h2>
+        <ul data-role="listview">
+            <li>
+                <h3>Naveen</h3>
+                <img src="naveen.jpg" /></li>
+            <li>
+                <h3>Bhumesh</h3>
+                <img src="bhumesh.jpg" /></li>
+            <li>
+                <h3>Nigam</h3>
+                <img src="nigam.jpg" /></li>
+        </ul>
+        <div id="mydv"></div>
+    </div>
+
+    <div data-role="view" id="company" data-layout="drawer-layout">
+        <h3 class="friends_class">Companies</h3>
+        <ul id="companies-list"></ul>
+
+    </div>
+    <div data-role="view" id="equipments" data-layout="drawer-layout">
+        <h3 class="friends_class">Equipments</h3>
+    </div>
+    <div id="tabstrip-location"
+        data-role="view"
+        data-init="initialize"
+        data-stretch="true"
+        data-layout="drawer-layout">
+
+           <!--   <div data-layout="drawer-layout" id="map-search-wrap">
+            <button id="map-navigate-home"></button>
+            <form onsubmit="return false;">
+                <input id="map-address" type="search"  placeholder="Address" />
+                <input id="map-search" type="submit" value=""  />
+            </form>
+        </div>-->
+        <br />
+        <div id="map-canvas"></div>
+
+    </div>
+
+
+    <div data-role="drawer" id="my-drawer">
+        <ul data-role="listview">
+            <li><a href="#friends">Team</a></li>
+            <li><a href="#company">Companies</a></li>
+            <li><a href="#equipments">Equipments</a></li>
+            <li><a href="#tabstrip-location">Map</a></li>
+            <li id="liId"></li>
+        </ul>
+
+    </div>
+    <div data-role="layout" data-id="drawer-layout">
+        <header data-role="footer">
+            <div data-role="navbar">
+                <a data-role="button" data-rel="drawer" href="#my-drawer" data-icon="drawer-button" data-align="left"></a>
+                <span data-role="view-title"></span>
+                <a data-align="right" data-role="button" class="nav-button" href="index.html">Home</a>
+            </div>
+        </header>
+    </div>
+    <script>
+        var app = new kendo.mobile.Application(document.body);
+    </script>
+
+    <style>
+        .km-ios #my-drawer .km-content, .km-android #my-drawer .km-content, .km-blackberry #my-drawer .km-content,
+        .km-ios #my-drawer .km-list > li, .km-android #my-drawer .km-list > li, .km-blackberry #my-drawer .km-list > li,
+        .km-ios #my-drawer .km-listview-link > .km-icon, .km-android #my-drawer .km-listview-link > .km-icon, .km-blackberry #my-drawer .km-listview-link > .km-icon,
+        .km-ios #my-drawer .km-list li > .km-icon, .km-android #my-drawer .km-list li > .km-icon, .km-blackberry #my-drawer .km-list li > .km-icon
+        {
+            background-color: #4e4e4e;
+            color: #fff;
+        }
+
+        .km-ios #my-drawer .km-group-title,
+        .km-blackberry #my-drawer .km-group-title
+        {
+            background-color: #6e6e6e;
+            color: #fff;
+        }
+
+        .km-drawer-button:before, .km-drawer-button:after
+        {
+            content: "\E077";
+        }
+
+        .km-inbox:before, .km-inbox:after
+        {
+            content: "\E0B0";
+        }
+
+        .km-sent:before, .km-sent:after
+        {
+            content: "\E0C6";
+        }
+
+        .km-trash:before, .km-trash:after
+        {
+            content: "\E0C3";
+        }
+
+        .km-spam:before, .km-spam:after
+        {
+            content: "\E0C5";
+        }
+
+        .km-star:before, .km-star:after
+        {
+            content: "\E0D7";
+        }
+
+        .km-settings:before, .km-settings:after
+        {
+            content: "\E0DA";
+        }
+
+        .km-off:before, .km-off:after
+        {
+            content: "\E0B9";
+        }
+
+        .inboxList
+        {
+            font-size: .8em;
+        }
+
+            .inboxList p,
+            .inboxList h2,
+            .inboxList h3
+            {
+                margin: 5px 2px;
+            }
+
+            .inboxList p,
+            .inboxList h3
+            {
+                color: #777;
+            }
+
+                .inboxList h3.time
+                {
+                    color: #369;
+                    float: left;
+                    margin-right: 5px;
+                }
+
+        .friends_class
+        {
+            background-color: blueviolet;
+            font-family: 'Bernard MT';
+            font-size: medium;
+            color: aliceblue;
+        }
+
+        .two-drawer-home img
+        {
+            float: left;
+            width: 3em;
+            height: 3em;
+            margin: 0;
+            border: 1px solid rgba(0,0,0,.2);
+            -webkit-border-radius: 4em;
+            border-radius: 4em;
+        }
+
+        #two-drawer-home h3
+        {
+            display: inline-block;
+            font-size: 1em;
+            line-height: 3em;
+            margin: 0 0 0 1em;
+        }
+
+        #two-drawer-home h2
+        {
+            background-color: blueviolet;
+            font-family: 'Bernard MT';
+            font-size: medium;
+            color: aliceblue;
+            display: inline-block;
+            font-size: 1em;
+            line-height: 3em;
+            margin: 0 0 0 1em;
+        }
+
+        .km-ios #two-drawer-home .km-listview
+        {
+            background-color: #eaf1f5;
+        }
+    </style>
+
+</body>
+</html>
